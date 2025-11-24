@@ -1,12 +1,11 @@
-
 ---
 
 ## 📁 1. SQL Projects
 > SQL 문법 학습 + 중급 분석 쿼리 실습
 
-- 📝 **SQL 기초 문제 풀이**
-- 📊 **Group By / Join / Window Function**
-- 📈 **데이터 분석용 SQL 실전 문제**
+- 📝 SQL 기초 문제 풀이
+- 📊 Group By / Join / Window Function
+- 📈 데이터 분석용 SQL 실전 문제
 
 👉 상세 내용: **`/SQL` 폴더 참고**
 
@@ -15,10 +14,10 @@
 ## 📁 2. Python Coding
 > 데이터 전처리, 시각화, 모델링 중심 학습 코드
 
-- `pandas` 활용 데이터 정리
+- `pandas` 데이터 전처리 실습
 - EDA(탐색적 데이터 분석)
-- 간단한 머신러닝 모델 훈련
-- 시각화 그래프 정리
+- 기본 머신러닝 모델 실습
+- matplotlib/seaborn 시각화
 
 👉 상세 내용: **`/Python` 폴더 참고**
 
@@ -27,20 +26,23 @@
 ## 📁 3. Projects
 > 작은 프로젝트부터 실전 데이터 분석 프로젝트까지 정리
 
-1. **프로젝트명**  
-   - 요약: 어떤 문제를 어떻게 해결했는지  
-   - 사용 기술: Python, SQL, ML  
-   - 주요 성과: 정확도 %, 비즈니스 인사이트 등  
-   - 파일 위치: `/Projects/ProjectName`
+### 🛒 01. 온라인 쇼핑몰 데이터 분석 (SQL + Python)
+- **요약:** 랜덤 더미 데이터 생성 → SQLite DB 구축 → 매출/고객/재구매 분석  
+- **사용 기술:** Python, SQLite, pandas, matplotlib  
+- **핵심 성과:**  
+  - 월별 매출, 카테고리 매출, 디바이스/결제수단 매출 분석  
+  - 성별·연령대별 AOV 분석  
+  - 재구매 고객군 분석  
+- **파일 위치:** `Projects/01_ShoppingMall_Analysis`
 
-👉 자세한 내용: **`/Projects` 폴더 참고**
+👉 자세한 내용: `/Projects` 폴더 참고
 
 ---
 
 ## 📧 Contact
 - Email: your-email@example.com  
-- GitHub: https://github.com/your-github
-- Notion/Blog (선택): link_here
+- GitHub: https://github.com/your-github  
+- Notion/Blog (선택): link_here  
 
 ---
 
