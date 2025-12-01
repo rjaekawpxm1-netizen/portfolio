@@ -1,0 +1,5 @@
+action_id,user_id,post_id,action_type,action_timestamp,session_id
+1,1,1001,view,2025-01-10 13:21:00,s1
+2,1,1001,like,2025-01-10 13:21:15,s1
+3,2,1002,view,2025-01-10 14:06:00,s2
+4,3,1003,comment,2025-01-11 09:35:00,s3

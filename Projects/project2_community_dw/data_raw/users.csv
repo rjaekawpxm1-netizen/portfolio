@@ -1,0 +1,4 @@
+user_id,gender,age,signup_date,region
+1,F,24,2025-01-01,Seoul
+2,M,29,2025-01-03,Busan
+3,F,31,2025-01-05,Incheon
