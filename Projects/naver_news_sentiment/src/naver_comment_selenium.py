@@ -10,11 +10,24 @@ from selenium.webdriver.common.keys import Keys
 ########################################
 # 1. 셀레니움 드라이버 실행
 ########################################
-def start_driver():
+def start_driver(headless=False):
+    print("[DEBUG] Selenium 크롤러 시작됨")
     options = webdriver.ChromeOptions()
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--headless")  # 브라우저 안 보이게 하려면 주석 제거
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
+    # headless=True 로 호출하면 브라우저 창 안 보이게 실행
+    if headless:
+        # 최신 크롬에서는 --headless=new 권장
+        options.add_argument("--headless=new")
+
+    print("[DEBUG] Chrome driver 생성 시도중...")
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=options
+    )
+    print("[DEBUG] Chrome driver 생성 완료")
     return driver
 
 
@@ -39,10 +52,13 @@ def scroll_to_bottom(driver):
 ########################################
 def get_comments_from_url(url):
     driver = start_driver()
+    print(f"[DEBUG] 기사 페이지 접근: {url}")
     driver.get(url)
+    print("[DEBUG] 페이지 로딩 완료")
+
     time.sleep(2)
 
-    print(f"📌 기사 접속 완료: {url}")
+    print(f"[INFO] 기사 접속 완료: {url}")
 
     # 댓글 영역까지 스크롤
     scroll_to_bottom(driver)
@@ -52,7 +68,7 @@ def get_comments_from_url(url):
     soup = BeautifulSoup(html, "html.parser")
 
     comment_blocks = soup.select(".u_cbox_text_wrap")
-    print(f"🔍 수집된 댓글 블록 수: {len(comment_blocks)}")
+    print(f"[INFO] 수집된 댓글 블록 수: {len(comment_blocks)}")
 
     comments = []
     for block in comment_blocks:
@@ -90,28 +106,34 @@ def get_comments_from_url(url):
 ########################################
 # 4. 메인 실행
 ########################################
+import pandas as pd
+
 if __name__ == "__main__":
-    TEST_URLS = [
-        "https://n.news.naver.com/mnews/article/449/0000328367",
-        "https://n.news.naver.com/mnews/article/277/0005688485",
-        "https://n.news.naver.com/mnews/article/214/0001465786"
-    ]
+
+    # 자동으로 URL 읽기
+    df_urls = pd.read_csv("../data/raw/news_urls.csv")
+    TEST_URLS = df_urls["url"].tolist()
 
     all_comments = []
 
     for url in TEST_URLS:
         print("\n=====================================")
-        print(f"🚀 댓글 수집 시작: {url}")
+        print(f"[START] 댓글 수집 시작: {url}")
         print("=====================================")
 
         df = get_comments_from_url(url)
-        print(f"➡ 수집된 댓글 수: {len(df)}")
+        print(f"[INFO] 수집된 댓글 수: {len(df)}")
 
-        df["article_url"] = url
-        all_comments.append(df)
+        if len(df) > 0:
+            df["article_url"] = url
+            all_comments.append(df)
 
-    final_df = pd.concat(all_comments, ignore_index=True)
-    final_df.to_csv("../data/raw/comments_selenium.csv", index=False, encoding="utf-8-sig")
+    # 빈 리스트 예외 처리
+    if len(all_comments) > 0:
+        final_df = pd.concat(all_comments, ignore_index=True)
+        final_df.to_csv("../data/raw/comments_selenium.csv", index=False, encoding="utf-8-sig")
 
-    print("\n🎉 완료! 저장된 파일:")
-    print("../data/raw/comments_selenium.csv")
+        print("\n[DONE] 완료! 저장된 파일:")
+        print("../data/raw/comments_selenium.csv")
+    else:
+        print("⚠️ 수집된 댓글이 없습니다. 뉴스 URL이 있는지 확인하세요.")
