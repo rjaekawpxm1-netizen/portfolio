@@ -3,12 +3,28 @@ import pandas as pd
 import os
 
 ########################################
+# 0. 경로 설정 (추가)
+########################################
+
+# sentiment_analysis.py 파일이 있는 폴더
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# 프로젝트 최상위 폴더 (src의 상위)
+ROOT_DIR = os.path.dirname(BASE_DIR)
+
+RAW_DIR = os.path.join(ROOT_DIR, "data", "raw")
+PROCESSED_DIR = os.path.join(ROOT_DIR, "data", "processed")
+
+
+########################################
 # 1. 데이터 불러오기
 ########################################
 
-def load_comments(csv_path="../data/raw/comments_selenium.csv"):
+def load_comments(csv_name="comments_selenium.csv"):
+    csv_path = os.path.join(RAW_DIR, csv_name)
+
     if not os.path.exists(csv_path):
         raise FileNotFoundError(f"{csv_path} 파일을 찾을 수 없습니다.")
+    
     df = pd.read_csv(csv_path)
     df = df.dropna(subset=["comment"])
     return df
@@ -98,15 +114,15 @@ def add_sentiment_labels(df):
 
 if __name__ == "__main__":
     # 1) 데이터 불러오기
-    df = load_comments("../data/raw/comments_selenium.csv")
+    df = load_comments("comments_selenium.csv")
     print(f"📂 불러온 댓글 수: {len(df)}")
 
     # 2) 감정 라벨링
     df_with_sentiment = add_sentiment_labels(df)
 
     # 3) 결과 저장
-    os.makedirs("../data/processed", exist_ok=True)
-    output_path = "../data/processed/comments_with_sentiment.csv"
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
+    output_path = os.path.join(PROCESSED_DIR, "comments_with_sentiment.csv")
     df_with_sentiment.to_csv(output_path, index=False, encoding="utf-8-sig")
 
     print("🎉 감정 분석(룰 기반) 완료!")
