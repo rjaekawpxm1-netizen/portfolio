@@ -1,10 +1,18 @@
 import streamlit as st
 import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc 
 import pandas as pd
 from wordcloud import WordCloud
 
-# 윈도우 기준 한글 폰트 경로 (다르면 변경해도 됨)
+# 🔹 윈도우 기준 한글 폰트 경로
 FONT_PATH = "C:/Windows/Fonts/malgun.ttf"
+
+# 폰트 설정
+font_name = font_manager.FontProperties(fname=FONT_PATH).get_name()
+rc('font', family=font_name)
+
+# 마이너스 기호 깨짐 방지
+plt.rcParams['axes.unicode_minus'] = False
 
 
 # ================================
@@ -39,11 +47,7 @@ def render_kpi_section(df: pd.DataFrame):
 # ================================
 # 2) 감정 분포 막대그래프
 # ================================
-def render_sentiment_chart(df: pd.DataFrame):
-    if "sentiment_ui" not in df.columns:
-        st.info("감정 정보가 없어 감정 분포를 표시할 수 없습니다.")
-        return
-
+def render_sentiment_chart(df):
     st.subheader("감정 분포")
 
     counts = (
@@ -53,34 +57,42 @@ def render_sentiment_chart(df: pd.DataFrame):
         .fillna(0)
     )
 
-    fig, ax = plt.subplots()
-    counts.plot(kind="bar", ax=ax)
-    ax.set_xlabel("감정")
-    ax.set_ylabel("댓글 수")
-    ax.set_title("댓글 감정 분포")
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.bar(counts.index, counts.values)
+
+    ax.set_xlabel("감정", fontsize=14)
+    ax.set_ylabel("댓글 수", fontsize=14)
+    ax.set_title("댓글 감정 분포", fontsize=16)
+
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.tight_layout()      # 🔥 글씨 잘림 방지
+
     st.pyplot(fig)
 
 
 # ================================
 # 3) 악성 댓글 분포 그래프
 # ================================
-def render_hate_chart(df: pd.DataFrame):
-    if "is_hate" not in df.columns:
-        st.info("악성 여부 컬럼(is_hate)이 없어 악성 댓글 분포를 표시할 수 없습니다.")
-        return
-
+def render_hate_chart(df):
     st.subheader("악성 댓글 분포")
 
     counts = df["is_hate"].value_counts().sort_index()
-    # 0,1 → 정상,악성 라벨로 변경
-    if len(counts.index) == 2:
+
+    if len(counts) == 2:
         counts.index = ["정상", "악성"]
 
-    fig, ax = plt.subplots()
-    counts.plot(kind="bar", ax=ax)
-    ax.set_xlabel("댓글 유형")
-    ax.set_ylabel("댓글 수")
-    ax.set_title("악성 vs 정상 댓글 수")
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.bar(counts.index, counts.values)
+
+    ax.set_xlabel("댓글 유형", fontsize=14)
+    ax.set_ylabel("댓글 수", fontsize=14)
+    ax.set_title("악성 댓글 비율 분포", fontsize=16)
+
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.tight_layout()   # 🔥 글씨 겹침 방지
+
     st.pyplot(fig)
 
 
