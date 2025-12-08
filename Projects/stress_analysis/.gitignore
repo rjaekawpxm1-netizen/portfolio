@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv
+
+# Node / React / React Native / Frontend
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/
+build/
+.cache/
+
+# Android / React Native build files
+android/.gradle/
+android/app/build/
+android/build/
+*.apk
+*.aar
+*.dex
+
+# iOS (만약 포함되어 있다면)
+ios/Pods/
+ios/build/
+
+# Machine Learning / AI large files
+*.pt
+*.h5
+*.onnx
+*.ckpt
+*.weights
+*.tflite
+
+# Temporary or system files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Backend temp
+logs/
+*.log
+
+# Zip / dataset / model outputs
+*.zip
+*.tar
+*.tar.gz
+datasets/
+outputs/
