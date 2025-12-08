@@ -1,0 +1,6 @@
+
+name: flutter_naver_login
+description: A fixed version of the flutter_naver_login plugin compatible with Flutter V2
+version: 1.0.0
+environment:
+  sdk: ">=2.12.0 <3.0.0"

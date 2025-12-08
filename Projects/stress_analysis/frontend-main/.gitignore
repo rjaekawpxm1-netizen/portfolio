@@ -1,0 +1,25 @@
+build/ 
+.dart_tool/ 
+
+# Platform-specific build and cache directories
+android/.gradle
+ios/Flutter/ephemeral/
+linux/flutter/ephemeral/
+macos/Flutter/ephemeral/
+windows/flutter/ephemeral/
+
+# Dependency caches
+packages/*/android/.gradle
+node_modules/
+
+# Other common ignore patterns
+src/ # Adjust if src contains source code you want to track
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore macOS specific files
+.DS_Store
+
+# Ignore Windows specific files
+Thumbs.db 
