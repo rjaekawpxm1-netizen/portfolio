@@ -4,19 +4,19 @@ import numpy as np
 import faiss
 from openai import OpenAI
 
-def _chunk_text(text: str, chunk_size: int = 600, overlap: int = 120) -> list[str]:
+def _chunk_text(text: str, chunk_size: int = 300) -> list[str]:
     text = text.replace("\r\n", "\n").strip()
+    if not text:
+        return []
+
     chunks = []
-    i = 0
-    while i < len(text):
-        j = min(len(text), i + chunk_size)
-        chunks.append(text[i:j])
-        i = j - overlap
-        if i < 0:
-            i = 0
-        if i >= len(text):
-            break
-    return [c.strip() for c in chunks if c.strip()]
+    for i in range(0, len(text), chunk_size):
+        chunk = text[i:i + chunk_size].strip()
+        if chunk:
+            chunks.append(chunk)
+
+    return chunks
+
 
 class RAGEngine:
     def __init__(self, index_path="storage/faiss.index", meta_path="storage/meta.json"):
