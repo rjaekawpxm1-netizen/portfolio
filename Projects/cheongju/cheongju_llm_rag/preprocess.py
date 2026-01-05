@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 # ------------------------------------------------------------------
@@ -7,19 +8,25 @@ import pandas as pd
 #  - 요일·시간대·월별 요약 (요일별(1), 시간대별(1), 월별(1), 2024, 2024.1, 2024.2)
 #  - 나중에 상세사고 데이터(발생일자 등)도 확장 가능
 # ------------------------------------------------------------------
-def load_accidents_csv(path):
-    # 1) 인코딩 자동 처리
-    # 1) 파일 타입 자동 분기 (엑셀 / CSV)
-    if str(path).lower().endswith((".xlsx", ".xls")):
-        df = pd.read_excel(path)
+def load_accidents_csv(file):
+    # file: Streamlit UploadedFile 또는 파일 경로(str)
+
+    # 1) 확장자 추출
+    name = getattr(file, "name", None)
+    if name is None:
+        name = str(file)
+    ext = os.path.splitext(name)[1].lower()
+
+    # 2) 엑셀 / CSV 분기
+    if ext in [".xlsx", ".xls"]:
+        df = pd.read_excel(file)
     else:
         try:
-           df = pd.read_csv(path, encoding="utf-8-sig")
+            df = pd.read_csv(file, encoding="utf-8-sig")
         except UnicodeDecodeError:
-           df = pd.read_csv(path, encoding="cp949")
+            df = pd.read_csv(file, encoding="cp949")
 
-
-    # 2) 컬럼명 정리 (공백, BOM 제거)
+    # 3) 컬럼명 정리 (이 아래부터는 네가 이미 쓰고 있는 모드 판별 / 매핑 로직)
     df.columns = [c.strip().lstrip("\ufeff") for c in df.columns]
     print("정리된 컬럼:", list(df.columns))
 

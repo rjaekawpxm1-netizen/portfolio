@@ -13,7 +13,10 @@ def main():
 
     with st.sidebar:
         st.header("1) 데이터 업로드")
-        uploaded = st.file_uploader("accidents CSV", type=["csv"])
+        uploaded = st.file_uploader(
+        "사고 데이터 업로드 (csv / xlsx)",
+        type=["csv", "xlsx", "xls"]
+    )
         st.header("2) 질문")
         question = st.text_area("예: 청원구에서 야간 교차로 사고 위험이 큰 이유와 대책은?", height=100)
         k = st.slider("검색 컨텍스트 개수(k)", 2, 8, 4)
