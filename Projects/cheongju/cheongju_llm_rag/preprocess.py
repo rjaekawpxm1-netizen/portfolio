@@ -149,7 +149,7 @@ def load_accidents_csv(file):
 #  - summary 계열(mode == *_summary)은 사고건수/사망자 등 합계 위주
 #  - detail 모드는 나중에 필요하면 확장
 # ------------------------------------------------------------------
-ddef basic_summary(df):
+def basic_summary(df):
     stats = {}
 
     # 1) 모드, 행/열 정보
