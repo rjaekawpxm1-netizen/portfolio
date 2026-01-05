@@ -43,7 +43,7 @@ def main():
         stats = basic_summary(df)
 
         st.subheader("📌 데이터 요약")
-        st.code(stats)
+        st.json(stats)
 
         retrieved = rag.retrieve(question, k=k)
 

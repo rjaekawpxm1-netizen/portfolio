@@ -140,6 +140,10 @@ def load_accidents_csv(file):
 
     # ❌ 더 이상 date/time/region 없다고 에러 내지 않고,
     #    그냥 "detail(또는 generic) 모드"로 받아들이기
+
+    if "accident_count" not in df.columns:
+        df["accident_count"] = 1
+
     df["mode"] = "detail"
     return df
 
@@ -196,7 +200,15 @@ def basic_summary(df):
         ("weather", "top_weather"),
         ("accident_type", "top_accident_type"),
     ]:
-        if col in df.columns:
-            stats[key] = df[col].value_counts().head(5).to_dict()
+          # 돌발 현황 파일 전용 요약 (컬럼이 있을 때만)
+        if "돌발분류명" in df.columns:
+          stats["top_incident_types"] = (
+            df["돌발분류명"].value_counts().head(5).to_dict()
+        )
+
+        if "연월" in df.columns:
+          stats["top_year_months"] = (
+            df["연월"].value_counts().head(5).to_dict()
+        )
 
     return stats
