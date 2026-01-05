@@ -7,10 +7,11 @@ def load_accidents_csv(path):
     except UnicodeDecodeError:
         df = pd.read_csv(path, encoding="cp949")
 
-    print("CSV columns:", list(df.columns))
+    # 2) 컬럼명에서 공백 / BOM 같은 숨은 문자 제거
+    df.columns = [c.strip().lstrip("\ufeff") for c in df.columns]
+    print("정리된 컬럼:", list(df.columns))  # 확인용
 
-    # 2) 이 파일 구조(구 단위 요약)에 맞게 컬럼 이름 정리
-    #    -> 나중에 코드에서 쓰기 편하게 영어로 바꿔줌
+    # 3) 한국어 → 영어 컬럼 매핑
     column_map = {
         "구": "region",
         "사고건수": "accident_count",
@@ -22,13 +23,14 @@ def load_accidents_csv(path):
 
     df = df.rename(columns={k: v for k, v in column_map.items() if k in df.columns})
 
-    # 3) 최소한 있어야 하는 컬럼만 체크 (region + 기본 지표들)
+    # 4) 최소 필요한 컬럼 체크
     required_cols = ["region", "accident_count", "death_count", "casualty_count"]
     missing = [c for c in required_cols if c not in df.columns]
     if missing:
         raise ValueError(f"요약 CSV 컬럼이 부족함: {missing} / 필요: {required_cols}")
 
     return df
+
 
 
 def basic_summary(df: pd.DataFrame) -> str:
