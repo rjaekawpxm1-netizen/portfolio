@@ -4,7 +4,7 @@ import numpy as np
 import faiss
 from openai import OpenAI
 
-def _chunk_text(text: str, chunk_size: int = 300) -> list[str]:
+def _chunk_text(text: str, chunk_size: int = 200):
     text = text.replace("\r\n", "\n").strip()
     if not text:
         return []
