@@ -23,19 +23,44 @@ def load_accidents_csv(path):
     df["month"] = df["datetime"].dt.month
     return df
 
-def basic_summary(df: pd.DataFrame) -> str:
-    # 간단 통계 텍스트 요약(LLM에 같이 넣기 좋게)
-    top_region = df["region"].value_counts().head(5).to_dict()
-    top_road = df["road_type"].value_counts().head(5).to_dict()
-    top_weather = df["weather"].value_counts().head(5).to_dict()
-    top_type = df["accident_type"].value_counts().head(5).to_dict()
-    top_hour = df["hour"].value_counts().sort_index().tail(6).to_dict()
+def basic_summary(df):
+    stats = {}
 
-    lines = []
-    lines.append(f"- 총 사고 건수: {len(df)}")
-    lines.append(f"- 지역 Top5: {top_region}")
-    lines.append(f"- 도로유형 Top5: {top_road}")
-    lines.append(f"- 날씨 Top5: {top_weather}")
-    lines.append(f"- 사고유형 Top5: {top_type}")
-    lines.append(f"- 시간대 분포(일부): {top_hour}")
-    return "\n".join(lines)
+    # 1) 전체 사고/사망/사상자 합계
+    if "accident_count" in df.columns:
+        stats["total_accidents"] = int(df["accident_count"].sum())
+    if "death_count" in df.columns:
+        stats["total_deaths"] = int(df["death_count"].sum())
+    if "casualty_count" in df.columns:
+        stats["total_casualties"] = int(df["casualty_count"].sum())
+
+    # 2) 사고건수 기준 상위 5개 구
+    if "region" in df.columns and "accident_count" in df.columns:
+        top_regions = (
+            df.sort_values("accident_count", ascending=False)
+              .head(5)[["region", "accident_count"]]
+              .to_dict(orient="records")
+        )
+        stats["top_regions"] = top_regions
+
+    # 3) 상세 사고 데이터가 있을 때만 계산 (없어도 에러 안 나게)
+    stats["top_road"] = (
+        df["road_type"].value_counts().head(5).to_dict()
+        if "road_type" in df.columns
+        else {}
+    )
+
+    stats["top_weather"] = (
+        df["weather"].value_counts().head(5).to_dict()
+        if "weather" in df.columns
+        else {}
+    )
+
+    stats["top_accident_type"] = (
+        df["accident_type"].value_counts().head(5).to_dict()
+        if "accident_type" in df.columns
+        else {}
+    )
+
+    return stats
+
