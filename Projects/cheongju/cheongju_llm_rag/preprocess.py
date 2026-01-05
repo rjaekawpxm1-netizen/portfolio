@@ -149,72 +149,54 @@ def load_accidents_csv(file):
 #  - summary 계열(mode == *_summary)은 사고건수/사망자 등 합계 위주
 #  - detail 모드는 나중에 필요하면 확장
 # ------------------------------------------------------------------
-def basic_summary(df):
+ddef basic_summary(df):
     stats = {}
 
-    mode = df["mode"].iloc[0] if "mode" in df.columns else None
-    if mode is None:
-        if "accident_count" in df.columns:
-            mode = "summary"
-        else:
-            mode = "detail"
+    # 1) 모드, 행/열 정보
+    mode = df["mode"].iloc[0] if "mode" in df.columns else "unknown"
+    stats["mode"] = mode
+    stats["rows"] = int(len(df))
+    stats["columns"] = list(df.columns)
 
-    # ===== 요약 계열 모드 (구/동/요일·시간대) =====
-    if mode in ["district_summary", "geo_summary", "time_summary", "summary"]:
-        if "accident_count" in df.columns:
-            stats["total_accidents"] = int(df["accident_count"].sum())
+    # 2) 공통 지표: 사고/사망/사상자 합계 (있으면 계산)
+    if "accident_count" in df.columns:
+        stats["total_accidents"] = int(df["accident_count"].sum())
 
-        if "death_count" in df.columns:
-            stats["total_deaths"] = int(df["death_count"].sum())
+    if "death_count" in df.columns:
+        stats["total_deaths"] = int(df["death_count"].sum())
 
-        # casualty_count가 있으면 사용
-        if "casualty_count" in df.columns:
-            stats["total_casualties"] = int(df["casualty_count"].sum())
+    if "casualty_count" in df.columns:
+        stats["total_casualties"] = int(df["casualty_count"].sum())
 
-        # 1) 지역 기준 상위 5개 (구/동 단위)
-        if "region" in df.columns and "accident_count" in df.columns:
-            top_regions = (
-                df.groupby("region")["accident_count"]
-                .sum()
-                .sort_values(ascending=False)
-                .head(5)
-                .to_dict()
-            )
-            stats["top_regions"] = top_regions
+    # 3) 지역 기준 top5 (구/동/region 있는 경우)
+    if "region" in df.columns and "accident_count" in df.columns:
+        top_regions = (
+            df.groupby("region")["accident_count"]
+              .sum()
+              .sort_values(ascending=False)
+              .head(5)
+              .to_dict()
+        )
+        stats["top_regions_by_accidents"] = top_regions
 
-        # 2) 요일 기준 상위 5개 (요일·시간대 CSV)
-        if "weekday" in df.columns and "accident_count" in df.columns:
-            top_weekdays = (
-                df.groupby("weekday")["accident_count"]
-                .sum()
-                .sort_values(ascending=False)
-                .head(5)
-                .to_dict()
-            )
-            stats["top_weekdays"] = top_weekdays
+    # 4) 요일 기준 top5 (요일·시간대 파일일 때)
+    if "weekday" in df.columns and "accident_count" in df.columns:
+        top_weekdays = (
+            df.groupby("weekday")["accident_count"]
+              .sum()
+              .sort_values(ascending=False)
+              .head(5)
+              .to_dict()
+        )
+        stats["top_weekdays_by_accidents"] = top_weekdays
 
-    # ===== detail 모드 (발생 일시/기상 등 상세데이터) =====
-    else:
-        # 필요하면 여기서 road_type, weather, accident_type 통계도 추가 가능
-        if "road_type" in df.columns:
-            stats["top_road"] = (
-                df["road_type"].value_counts().head(5).to_dict()
-            )
-        else:
-            stats["top_road"] = {}
-
-        if "weather" in df.columns:
-            stats["top_weather"] = (
-                df["weather"].value_counts().head(5).to_dict()
-            )
-        else:
-            stats["top_weather"] = {}
-
-        if "accident_type" in df.columns:
-            stats["top_accident_type"] = (
-                df["accident_type"].value_counts().head(5).to_dict()
-            )
-        else:
-            stats["top_accident_type"] = {}
+    # 5) 상세 데이터에만 있는 애들(있을 때만 추가)
+    for col, key in [
+        ("road_type", "top_road"),
+        ("weather", "top_weather"),
+        ("accident_type", "top_accident_type"),
+    ]:
+        if col in df.columns:
+            stats[key] = df[col].value_counts().head(5).to_dict()
 
     return stats
