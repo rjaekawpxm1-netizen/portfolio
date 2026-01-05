@@ -1,41 +1,35 @@
 import pandas as pd
 
-REQUIRED_COLS = ["date", "time", "region", "road_type", "weather", "severity", "accident_type"]
-
 def load_accidents_csv(path):
+    # 1) 인코딩 자동 처리
     try:
         df = pd.read_csv(path, encoding="utf-8-sig")
     except UnicodeDecodeError:
         df = pd.read_csv(path, encoding="cp949")
 
-    # (선택) 실제 컬럼명 확인용
     print("CSV columns:", list(df.columns))
-    missing = [c for c in REQUIRED_COLS if c not in df.columns]
-    
-    # 2) 한국어 → 코드에서 쓰는 영어 컬럼 이름으로 매핑
-    column_map = {
-        # ⬇⬇ 여기 "키" 부분을 네 CSV 첫 줄(헤더)랑 똑같이 맞춰줘 ⬇⬇
 
-        "발생일자": "date",          # 예시: 날짜
-        "발생시간": "time",          # 예시: 시간
-        "시군구": "region",          # 예시: 청주시 청원구/상당구 ...
-        "도로형태": "road_type",     # 예시: 교차로, straight 등
-        "기상상태": "weather",       # 예시: 맑음, 비, 눈…
-        "사고심각도": "severity",    # 예시: 사망/중상/경상/부상신고 등
-        "사고유형": "accident_type", # 예시: 차대차, 차대사람 등
+    # 2) 이 파일 구조(구 단위 요약)에 맞게 컬럼 이름 정리
+    #    -> 나중에 코드에서 쓰기 편하게 영어로 바꿔줌
+    column_map = {
+        "구": "region",
+        "사고건수": "accident_count",
+        "사망자수": "death_count",
+        "부상신고자수": "injury_report_count",
+        "사상자수": "casualty_count",
+        "사고 1건당 사상자수": "casualties_per_accident",
     }
 
-    # 3) 실제 CSV에 존재하는 컬럼만 골라서 rename
     df = df.rename(columns={k: v for k, v in column_map.items() if k in df.columns})
-    
-    if missing:
-        raise ValueError(f"CSV 컬럼이 부족함: {missing} / 필요: {REQUIRED_COLS}")
 
-    # 파생 컬럼
-    df["datetime"] = pd.to_datetime(df["date"].astype(str) + " " + df["time"].astype(str), errors="coerce")
-    df["hour"] = df["datetime"].dt.hour
-    df["month"] = df["datetime"].dt.month
+    # 3) 최소한 있어야 하는 컬럼만 체크 (region + 기본 지표들)
+    required_cols = ["region", "accident_count", "death_count", "casualty_count"]
+    missing = [c for c in required_cols if c not in df.columns]
+    if missing:
+        raise ValueError(f"요약 CSV 컬럼이 부족함: {missing} / 필요: {required_cols}")
+
     return df
+
 
 def basic_summary(df: pd.DataFrame) -> str:
     # 간단 통계 텍스트 요약(LLM에 같이 넣기 좋게)
