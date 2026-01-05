@@ -11,6 +11,23 @@ def load_accidents_csv(path):
     # (선택) 실제 컬럼명 확인용
     print("CSV columns:", list(df.columns))
     missing = [c for c in REQUIRED_COLS if c not in df.columns]
+    
+    # 2) 한국어 → 코드에서 쓰는 영어 컬럼 이름으로 매핑
+    column_map = {
+        # ⬇⬇ 여기 "키" 부분을 네 CSV 첫 줄(헤더)랑 똑같이 맞춰줘 ⬇⬇
+
+        "발생일자": "date",          # 예시: 날짜
+        "발생시간": "time",          # 예시: 시간
+        "시군구": "region",          # 예시: 청주시 청원구/상당구 ...
+        "도로형태": "road_type",     # 예시: 교차로, straight 등
+        "기상상태": "weather",       # 예시: 맑음, 비, 눈…
+        "사고심각도": "severity",    # 예시: 사망/중상/경상/부상신고 등
+        "사고유형": "accident_type", # 예시: 차대차, 차대사람 등
+    }
+
+    # 3) 실제 CSV에 존재하는 컬럼만 골라서 rename
+    df = df.rename(columns={k: v for k, v in column_map.items() if k in df.columns})
+    
     if missing:
         raise ValueError(f"CSV 컬럼이 부족함: {missing} / 필요: {REQUIRED_COLS}")
 
