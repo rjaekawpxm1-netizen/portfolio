@@ -3,7 +3,7 @@ import pandas as pd
 REQUIRED_COLS = ["date", "time", "region", "road_type", "weather", "severity", "accident_type"]
 
 def load_accidents_csv(path: str) -> pd.DataFrame:
-    df = pd.read_csv(path)
+    df = pd.read_csv(path, encoding="cp949")
     missing = [c for c in REQUIRED_COLS if c not in df.columns]
     if missing:
         raise ValueError(f"CSV 컬럼이 부족함: {missing} / 필요: {REQUIRED_COLS}")
