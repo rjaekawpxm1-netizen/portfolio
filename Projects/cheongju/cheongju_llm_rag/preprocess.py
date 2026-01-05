@@ -122,21 +122,24 @@ def load_accidents_csv(file):
         "발생시간": "time",
         "시군구": "region",
         "구": "region",
+        "시군구명": "region",
         "노면형태": "road_type",
         "도로형태": "road_type",
         "기상상태": "weather",
         "사고유형": "accident_type",
         "사고유형_대분류": "accident_type",
-        # severity(중상/경상 등)는 데이터 구조 보고 나중에 추가해도 됨
     }
     df = df.rename(columns={k: v for k, v in column_map_detail.items() if k in df.columns})
 
-    # 상세 모드에서 최소로 요구할 컬럼 (너무 빡세게 안 함)
-    required_detail = ["date", "time", "region"]
-    missing = [c for c in required_detail if c not in df.columns]
-    if missing:
-        raise ValueError(f"인식할 수 없는 CSV 형식입니다. 최소 컬럼 부족: {missing}")
+    # region 비슷한 컬럼이 하나도 없으면 그냥 안 만들어도 됨 (LLM에는 stats 거의 안 쓰여도 됨)
+    if "region" not in df.columns:
+        for cand in ["시군구", "구", "시군구명"]:
+            if cand in df.columns:
+                df["region"] = df[cand].astype(str)
+                break
 
+    # ❌ 더 이상 date/time/region 없다고 에러 내지 않고,
+    #    그냥 "detail(또는 generic) 모드"로 받아들이기
     df["mode"] = "detail"
     return df
 
