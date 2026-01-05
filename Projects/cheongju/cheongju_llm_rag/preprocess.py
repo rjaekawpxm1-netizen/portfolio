@@ -2,8 +2,14 @@ import pandas as pd
 
 REQUIRED_COLS = ["date", "time", "region", "road_type", "weather", "severity", "accident_type"]
 
-def load_accidents_csv(path: str) -> pd.DataFrame:
-    df = pd.read_csv(path, encoding="cp949")
+def load_accidents_csv(path):
+    try:
+        df = pd.read_csv(path, encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        df = pd.read_csv(path, encoding="cp949")
+
+    # (선택) 실제 컬럼명 확인용
+    print("CSV columns:", list(df.columns))
     missing = [c for c in REQUIRED_COLS if c not in df.columns]
     if missing:
         raise ValueError(f"CSV 컬럼이 부족함: {missing} / 필요: {REQUIRED_COLS}")
