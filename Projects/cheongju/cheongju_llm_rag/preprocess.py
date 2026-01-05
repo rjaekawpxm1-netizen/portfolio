@@ -9,10 +9,15 @@ import pandas as pd
 # ------------------------------------------------------------------
 def load_accidents_csv(path):
     # 1) 인코딩 자동 처리
-    try:
-        df = pd.read_csv(path, encoding="utf-8-sig")
-    except UnicodeDecodeError:
-        df = pd.read_csv(path, encoding="cp949")
+    # 1) 파일 타입 자동 분기 (엑셀 / CSV)
+    if str(path).lower().endswith((".xlsx", ".xls")):
+        df = pd.read_excel(path)
+    else:
+        try:
+           df = pd.read_csv(path, encoding="utf-8-sig")
+        except UnicodeDecodeError:
+           df = pd.read_csv(path, encoding="cp949")
+
 
     # 2) 컬럼명 정리 (공백, BOM 제거)
     df.columns = [c.strip().lstrip("\ufeff") for c in df.columns]
