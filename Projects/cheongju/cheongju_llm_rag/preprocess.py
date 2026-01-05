@@ -20,16 +20,22 @@ def load_accidents_csv(path):
         "사상자수": "casualty_count",
         "사고 1건당 사상자수": "casualties_per_accident",
     }
-
     df = df.rename(columns={k: v for k, v in column_map.items() if k in df.columns})
 
-    # 4) 최소 필요한 컬럼 체크
+    # 4) 혹시라도 위 매핑이 실패했으면,
+    #    "첫 번째 컬럼을 region으로 강제"해서 넣어주기
+    if "region" not in df.columns:
+        first_col = df.columns[0]
+        df["region"] = df[first_col].astype(str)
+
+    # 5) 최소 필요한 컬럼 체크
     required_cols = ["region", "accident_count", "death_count", "casualty_count"]
     missing = [c for c in required_cols if c not in df.columns]
     if missing:
         raise ValueError(f"요약 CSV 컬럼이 부족함: {missing} / 필요: {required_cols}")
 
     return df
+
 
 
 
