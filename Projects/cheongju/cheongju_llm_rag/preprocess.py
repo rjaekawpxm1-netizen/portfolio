@@ -19,12 +19,26 @@ def load_accidents_csv(file):
 
     # 2) 엑셀 / CSV 분기
     if ext in [".xlsx", ".xls"]:
-        df = pd.read_excel(file)
-    else:
         try:
-            df = pd.read_csv(file, encoding="utf-8-sig")
-        except UnicodeDecodeError:
-            df = pd.read_csv(file, encoding="cp949")
+            df = pd.read_excel(file)
+        except EmptyDataError:
+            raise ValueError("엑셀 파일 안에 데이터가 없어서 읽을 수 없어.")
+
+    # 2) CSV 파일
+    else:
+        last_error = None
+        for enc in ("utf-8-sig", "cp949"):
+            try:
+                df = pd.read_csv(file, encoding=enc)
+                break
+            except UnicodeDecodeError as e:
+                last_error = e
+                continue
+            except EmptyDataError:
+                raise ValueError("CSV 파일 안에 데이터가 없어서 읽을 수 없어.")
+        else:
+            # utf-8, cp949 둘 다 실패한 경우
+            raise ValueError(f"CSV 인코딩을 인식하지 못했어. (마지막 에러: {last_error})")
 
     # 3) 컬럼명 정리 (이 아래부터는 네가 이미 쓰고 있는 모드 판별 / 매핑 로직)
     df.columns = [c.strip().lstrip("\ufeff") for c in df.columns]

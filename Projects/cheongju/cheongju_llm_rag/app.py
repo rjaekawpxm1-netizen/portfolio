@@ -39,7 +39,13 @@ def main():
             st.error("질문을 입력해줘.")
             st.stop()
 
-        df = load_accidents_csv(uploaded)
+         # 🔴 파일 로딩 에러를 화면에서 보여주기
+        try:
+            df = load_accidents_csv(uploaded)
+        except Exception as e:
+            st.error(f"파일을 읽는 중 오류가 발생했어: {e}")
+            st.stop()
+
         stats = basic_summary(df)
 
         st.subheader("📌 데이터 요약")
