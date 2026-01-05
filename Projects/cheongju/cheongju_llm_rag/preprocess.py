@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from pandas.errors import EmptyDataError 
 
 # ------------------------------------------------------------------
 # CSV 로딩 함수
