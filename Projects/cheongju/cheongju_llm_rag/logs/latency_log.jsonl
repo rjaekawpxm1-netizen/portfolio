@@ -1,1 +1,2 @@
 {"timestamp": "2026-01-07T14:59:18.491218", "question": "청원구에서 야간 교차로 사고 위험이 큰 이유와 대책은?", "retrieval_ms": 1111, "llm_ms": 5542, "total_ms": 6666, "top_k": 4, "chunk_size": 200, "model": "gpt-4o-mini"}
+{"timestamp": "2026-01-07T16:45:42.826253", "question": "흥덕구와 오창읍 교통사고 비교분석해줘", "retrieval_ms": 1597, "llm_ms": 5964, "total_ms": 7581, "top_k": 2, "chunk_size": 200, "model": "gpt-4o-mini"}
