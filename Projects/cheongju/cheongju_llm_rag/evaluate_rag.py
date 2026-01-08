@@ -1,6 +1,8 @@
 # evaluate_rag.py
 from rag_engine import RAGEngine
 import config
+from dotenv import load_dotenv
+load_dotenv()
 
 TEST_CASES = [
     {
