@@ -6,6 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
+from pathlib import Path
+
 
 ########################################
 # 1. 셀레니움 드라이버 실행
@@ -111,7 +113,16 @@ import pandas as pd
 if __name__ == "__main__":
 
     # 자동으로 URL 읽기
-    df_urls = pd.read_csv("../data/raw/news_urls.csv")
+    BASE_DIR = Path(__file__).resolve().parents[2]  # 프로젝트 루트
+    raw_dir = BASE_DIR / "data" / "raw"
+
+    news_url_path = raw_dir / "news_urls.csv"
+    if not news_url_path.exists():
+        raise FileNotFoundError(f"❌ news_urls.csv 없음: {news_url_path}")
+
+    df_urls = pd.read_csv(news_url_path, encoding="utf-8-sig")
+    print(f"✅ URL 로드 완료: {len(df_urls)}건")
+
     TEST_URLS = df_urls["url"].tolist()
 
     all_comments = []
@@ -128,12 +139,21 @@ if __name__ == "__main__":
             df["article_url"] = url
             all_comments.append(df)
 
-    # 빈 리스트 예외 처리
-    if len(all_comments) > 0:
-        final_df = pd.concat(all_comments, ignore_index=True)
-        final_df.to_csv("../data/raw/comments_selenium.csv", index=False, encoding="utf-8-sig")
+    from pathlib import Path
 
-        print("\n[DONE] 완료! 저장된 파일:")
-        print("../data/raw/comments_selenium.csv")
-    else:
-        print("⚠️ 수집된 댓글이 없습니다. 뉴스 URL이 있는지 확인하세요.")
+# 프로젝트 루트 기준 경로 설정
+BASE_DIR = Path(__file__).resolve().parents[2]
+raw_dir = BASE_DIR / "data" / "raw"
+raw_dir.mkdir(parents=True, exist_ok=True)
+
+# 빈 리스트 예외 처리
+if len(all_comments) > 0:
+    final_df = pd.concat(all_comments, ignore_index=True)
+
+    out_path = raw_dir / "comments_selenium.csv"
+    final_df.to_csv(out_path, index=False, encoding="utf-8-sig")
+
+    print("\n[DONE] 완료! 저장된 파일:")
+    print(out_path)
+else:
+    print("⚠️ 수집된 댓글이 없습니다. 뉴스 URL이 있는지 확인하세요.")
