@@ -1,0 +1,6 @@
+﻿comment,date,like,dislike,article_url,comment_clean,sentiment
+좋아요,d1,1,0,u1,좋아요,긍정
+최악,d2,0,2,u1,최악,부정
+그냥,d3,0,0,u2,그냥,중립
+병신이네,d4,0,1,u2,병신이네,중립
+대박 좋다,d5,2,0,u1,대박 좋다,긍정

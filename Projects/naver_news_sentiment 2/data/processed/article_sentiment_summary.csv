@@ -1,0 +1,3 @@
+﻿article_url,section,pos_cnt,neg_cnt,neu_cnt,n_comments,avg_like,avg_dislike,net_like,net_dislike,hate_ratio,pos_ratio,neu_ratio,neg_ratio,sentiment_score,risk_score,risk_level
+u1,사회,2,1,0,3,1.0,0.6666666666666666,3,2,0.0,0.6666666666666666,0.0,0.3333333333333333,0.3333333333333333,25.0,LOW
+u2,연예,0,0,2,2,0.0,0.5,0,1,0.5,0.0,1.0,0.0,0.0,20.0,LOW
