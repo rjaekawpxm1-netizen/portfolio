@@ -4,12 +4,54 @@ from matplotlib import font_manager, rc
 import pandas as pd
 from wordcloud import WordCloud
 
-# 🔹 윈도우 기준 한글 폰트 경로
-FONT_PATH = "C:/Windows/Fonts/malgun.ttf"
+import os
+import platform
 
-# 폰트 설정
-font_name = font_manager.FontProperties(fname=FONT_PATH).get_name()
-rc('font', family=font_name)
+def get_korean_font_path():
+    system = platform.system()
+
+    # Windows
+    if system == "Windows":
+        candidates = [
+            r"C:\Windows\Fonts\malgun.ttf",
+            r"C:\Windows\Fonts\malgunsl.ttf",
+        ]
+        for p in candidates:
+            if os.path.exists(p):
+                return p
+
+    # macOS
+    if system == "Darwin":
+        candidates = [
+            "/System/Library/Fonts/Supplemental/AppleGothic.ttf",
+            "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+            "/Library/Fonts/AppleGothic.ttf",
+        ]
+        for p in candidates:
+            if os.path.exists(p):
+                return p
+
+    # Linux(옵션)
+    candidates = [
+        "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
+        "/usr/share/fonts/truetype/nanum/NanumGothicCoding.ttf",
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            return p
+
+    return None
+
+FONT_PATH = get_korean_font_path()
+
+# 폰트 설정 (matplotlib)
+if FONT_PATH:
+    font_name = font_manager.FontProperties(fname=FONT_PATH).get_name()
+    rc("font", family=font_name)
+
+# 마이너스 기호 깨짐 방지
+plt.rcParams["axes.unicode_minus"] = False
+
 
 # 마이너스 기호 깨짐 방지
 plt.rcParams['axes.unicode_minus'] = False
@@ -170,8 +212,9 @@ def _build_wordcloud(text_series):
         width=800,
         height=400,
         background_color="white",
-        font_path=FONT_PATH,
-    ).generate(joined)
+        font_path=FONT_PATH if FONT_PATH else None,
+     ).generate(joined)
+
 
     fig, ax = plt.subplots()
     ax.imshow(wc, interpolation="bilinear")
