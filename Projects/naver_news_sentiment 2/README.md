@@ -1,6 +1,5 @@
 뉴스 댓글 감정 분석
 
-(News Comment Sentiment Analysis)
 
 1. 프로젝트 개요
 

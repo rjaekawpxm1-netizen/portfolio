@@ -1,4 +1,6 @@
-호텔 예약 위험도 분석 (Hotel Booking Risk Analysis)
+호텔 예약 위험도 분석 
+캐글데이터(hotel booking demand)
+
 1. 프로젝트 개요
 
 본 프로젝트는 호텔 예약 데이터를 기반으로
