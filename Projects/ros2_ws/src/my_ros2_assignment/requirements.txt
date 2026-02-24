@@ -1,0 +1,4 @@
+# ROS2 시스템 및 GUI 구동을 위한 apt 의존성 패키지 목록
+python3-pyqt5
+ros-humble-joint-state-publisher-gui
+ros-humble-xacro
