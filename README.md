@@ -1,7 +1,8 @@
 🔹 프로젝트 요약
 (자세한 내용은 개별폴더의 readme에 있습니다)
 
-1. 호텔 예약 위험도 분석  (projects/ hotel_risk_model)
+
+호텔 예약 위험도 분석  (projects/ hotel_risk_model)
 
 호텔 예약 데이터 기반 취소 및 손실 위험 요인 분석
 
@@ -10,7 +11,9 @@
 고위험 조합 정의 및 개선 시나리오 제안
 👉 비즈니스 의사결정 중심 분석 프로젝트
 
-2. AI 스트레스 분석  (projects/ stress_analysis)
+
+
+AI 스트레스 분석  (projects/ stress_analysis)
 
 사용자 데이터 기반 스트레스 상태 예측
 
@@ -19,23 +22,42 @@
 분석 결과를 서비스 형태로 활용 가능하도록 설계
 👉 AI + 데이터 분석 결합 프로젝트
 
-3. Bosch 생산 라인 공정 불량 분석 (projects/ bosch_analysis)
+
+
+Bosch 생산 라인 공정 불량 분석 (projects/ bosch_analysis)
 
 제조 공정 데이터 기반 불량 패턴 분석
 
 공정 흐름 및 특정 공정 라인에서 불량 집중 구간 도출
 
-불량 예측 모델 구축 및 개선 가능성 제시 👉 제조 공정 최적화 분석 프로젝트
+불량 예측 모델 구축 및 개선 가능성 제시 
+👉 제조 공정 최적화 분석 프로젝트
 
-4. UCI SECOM 공정 불량 분석 (projects/ secom_analysis)
+
+
+UCI SECOM 공정 불량 분석 (projects/ secom_analysis)
 
 공정 센서 데이터를 활용한 불량 발생 패턴 분석
 
 다수 센서 변수 간 관계를 고려한 불량 예측 모델 구축
 
-Feature Importance 기반 불량 원인 추적 가능 👉 데이터 기반 제조 공정 예측 프로젝트
+Feature Importance 기반 불량 원인 추적 가능
+ 👉 데이터 기반 제조 공정 예측 프로젝트
 
-5. 뉴스 댓글 감정 분석  (projects/ naver_news_sentiment2)
+
+
+ROS2 기반 로봇암 제어 및 최적화 (projects/ ros2_ws)
+
+ROS2 Foxy를 활용한 로봇암 노드 설계 및 통신 구현
+
+Kinematics 분석을 통한 정밀 좌표 제어 및 경로 계획
+
+실시간 센서 데이터 피드백 기반의 동작 오류 디버깅
+👉 로봇 운영 체제(ROS2) 및 하드웨어 제어 프로젝트
+
+
+
+뉴스 댓글 감정 분석  (projects/ naver_news_sentiment2)
 
 뉴스 댓글 텍스트 데이터 수집 및 전처리
 
@@ -44,7 +66,9 @@ Feature Importance 기반 불량 원인 추적 가능 👉 데이터 기반 제�
 여론 흐름을 정량적으로 파악하는 분석
 👉 자연어 처리(NLP) 기반 분석 프로젝트
 
-6. 청주 교통사고 데이터 분석 (projects/ cheongju)
+
+
+청주 교통사고 데이터 분석 (projects/ cheongju)
 
 공공데이터를 활용한 지역 교통사고 분석
 
@@ -53,7 +77,9 @@ Feature Importance 기반 불량 원인 추적 가능 👉 데이터 기반 제�
 지역 안전 개선을 위한 인사이트 도출
 👉 공공데이터 분석 프로젝트
 
-7. 주문 자동화 RPA (projects/ project3_rpa_order_pipeline)
+
+
+주문 자동화 RPA (projects/ project3_rpa_order_pipeline)
 
 반복적인 주문 업무 자동화
 
@@ -62,7 +88,9 @@ Feature Importance 기반 불량 원인 추적 가능 👉 데이터 기반 제�
 데이터 처리 및 자동화 로직 구현
 👉 실무 자동화 중심 프로젝트
 
-8. 온라인 매출 분석 (가상 데이터) (projects/ project1_shop_analysis)
+
+
+온라인 매출 분석 (가상 데이터) (projects/ project1_shop_analysis)
 
 가상 매출 데이터를 활용한 기본 매출 분석
 
